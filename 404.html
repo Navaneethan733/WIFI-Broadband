@@ -1,0 +1,222 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>404 - Page Not Found | STACKLY</title>
+
+<link href="css/bootstrap.min.css" rel="stylesheet">
+<link href="css/fontawesome.css" rel="stylesheet">
+<link href="css/linear.css" rel="stylesheet">
+<link href="css/animate.css" rel="stylesheet">
+<link href="css/style.css" rel="stylesheet">
+
+<link rel="shortcut icon" href="images/favicon.webp" type="image/x-icon">
+<link rel="icon" href="images/favicon.webp" type="image/x-icon">
+
+
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0">
+
+<style>
+    .error-section {
+        position: relative;
+        padding: 120px 0;
+        background: var(--navy);
+        min-height: 80vh;
+        display: flex;
+        align-items: center;
+        overflow: hidden;
+    }
+    .error-section .bg-pattern {
+        position: absolute;
+        inset: 0;
+        background-image: url('images/icons/pattern-1.webp');
+        background-size: cover;
+        opacity: 0.05;
+    }
+    .error-card {
+        position: relative;
+        z-index: 2;
+        background: rgba(255, 255, 255, 0.05);
+        backdrop-filter: blur(15px);
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        border-radius: 30px;
+        padding: 60px 40px;
+        text-align: center;
+        max-width: 700px;
+        margin: 0 auto;
+        box-shadow: 0 25px 50px rgba(0,0,0,0.3);
+    }
+    .error-code {
+        font-size: clamp(8rem, 15vw, 12rem);
+        font-weight: 900;
+        line-height: 1;
+        background: linear-gradient(to bottom, var(--red), #ff4d5d);
+        -webkit-background-clip: text;
+        background-clip: text;
+        -webkit-text-fill-color: transparent;
+        margin-bottom: 10px;
+        filter: drop-shadow(0 0 20px rgba(232, 25, 44, 0.4));
+        animation: pulse-glow 3s infinite ease-in-out;
+    }
+    @keyframes pulse-glow {
+        0%, 100% { filter: drop-shadow(0 0 15px rgba(232, 25, 44, 0.3)); transform: scale(1); }
+        50% { filter: drop-shadow(0 0 30px rgba(232, 25, 44, 0.6)); transform: scale(1.02); }
+    }
+    .error-section h2 {
+        color: white;
+        font-weight: 800;
+        font-size: 2.5rem;
+        margin-bottom: 20px;
+    }
+    .error-section .text {
+        color: rgba(255,255,255,0.7);
+        font-size: 1.1rem;
+        margin-bottom: 40px;
+        max-width: 500px;
+        margin-left: auto;
+        margin-right: auto;
+    }
+    .broken-wire {
+        margin-bottom: 40px;
+        font-size: 80px;
+        color: var(--red);
+        opacity: 0.8;
+    }
+</style>
+</head>
+
+<body>
+
+<div class="page-wrapper">
+	
+	
+	<div class="preloader"><div class="wifi-loader"><span></span><span></span><span></span><span></span></div><div class="preloader-logo"><img src="images/logo.webp" alt="STACKLY"></div></div>
+	
+	
+	<header class="main-header header-style-one">
+		<div class="header-lower">
+			<div class="main-box">
+				<div class="logo-box">
+					<div class="logo"><a href="index.html"><img src="images/logo.webp" alt="" title="STACKLY"></a></div>
+				</div>
+				<div class="nav-outer">    
+					<nav class="nav main-menu">
+						<ul class="navigation">
+							<li class="dropdown"><a href="index.html">Home</a>
+								<ul>
+									<li><a href="index.html">Home 1</a></li>
+									<li><a href="index-2.html">Home 2</a></li>
+								</ul>
+							</li>
+							<li><a href="services.html">Services</a></li>
+							<li><a href="about.html">About</a></li>
+							<li><a href="blog.html">Blog</a></li>
+							<li><a href="contact.html">Contact</a></li>
+						</ul>
+					</nav>
+				</div>
+				<div class="outer-box">                    
+					<a href="tel:+919876543210" class="info-btn">
+						<div class="circle-icon"><i class="fa fa-phone"></i></div>
+						<div class="info-text">
+							<small>Call Anytime</small>
+							<strong>9876543210</strong>
+						</div>
+					</a>
+					<div class="mobile-nav-toggler"><span class="icon lnr-icon-bars"></span></div>
+				</div>
+			</div>
+		</div>
+
+		
+		<div class="mobile-menu">
+			<div class="menu-backdrop"></div>
+			<nav class="menu-box">
+				<div class="upper-box">
+					<div class="nav-logo"><a href="index.html"><img src="images/logo.webp" alt="" title=""></a></div>
+					<div class="close-btn"><i class="icon fa fa-times"></i></div>
+				</div>
+				<ul class="navigation clearfix"></ul>
+			</nav>
+		</div>
+
+		
+		<div class="sticky-header">
+			<div class="auto-container">
+				<div class="inner-container">
+					<div class="logo"><a href="index.html"><img src="images/logo.webp" alt=""></a></div>
+					<div class="nav-outer">
+						<nav class="main-menu">
+							<div class="navbar-collapse show collapse clearfix">
+								<ul class="navigation clearfix"></ul>
+							</div>
+						</nav>
+						<div class="mobile-nav-toggler"><span class="icon lnr-icon-bars"></span></div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</header>
+    
+    
+    <section class="error-section">
+        <div class="bg-pattern"></div>
+        <div class="auto-container">
+            <div class="error-card wow fadeInUp">
+                <div class="broken-wire">
+                    <i class="icon lnr lnr-icon-warning"></i>
+                </div>
+                <div class="error-code">404</div>
+                <h2>Oops! Page Not Found</h2>
+                <div class="text">The page you are looking for might have been removed, had its name changed, or is temporarily unavailable.</div>
+                <a href="index.html" class="theme-btn btn-style-one"><span class="btn-title">Back to Home <i class="fa fa-arrow-right"></i></span></a>
+            </div>
+        </div>
+    </section>
+    
+	
+	<footer class="main-footer">
+		<div class="bg bg-pattern-3"></div>
+		<div class="footer-upper">
+			<div class="auto-container">
+				<div class="row">
+					<div class="logo-box col-lg-4 col-md-12">
+						<div class="inner">
+							<div class="logo"><a href="#"> <img src="images/logo.webp" alt=""></a></div>
+						</div>
+					</div>
+					<div class="contact-info-block col-lg-4 col-md-6">
+						<div class="inner">
+							<i class="icon lnr lnr-icon-phone-handset"></i>
+							<span class="sub-title">Call Us On</span>
+							<div class="text"><a href="tel:+919876543210">+91 9876543210</a></div>
+						</div>
+					</div>
+					<div class="contact-info-block col-lg-4 col-md-6">
+						<div class="inner">
+							<i class="icon lnr lnr-icon-envelope1"></i>
+							<span class="sub-title">Mail to Us</span>
+							<div class="text"><a href="mailto:help@stackly.com">help@stackly.com</a></div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+		<div class="footer-bottom">
+			<div class="auto-container">
+				<div class="copyright-text">© Copyrights 2024 by <a href="index.html">STACKLY</a></div>
+			</div>
+		</div>
+	</footer>
+
+</div>
+
+<script src="js/jquery.js?v=4"></script> 
+<script src="js/popper.min.js?v=4"></script>
+<script src="js/bootstrap.min.js?v=4"></script>
+<script src="js/wow.js?v=4"></script>
+<script src="js/appear.js?v=4"></script>
+<script src="js/script.js?v=4"></script>
+</body>
+</html>
