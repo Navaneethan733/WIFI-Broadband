@@ -302,12 +302,12 @@ body.mobile-menu-visible .mobile-menu .menu-box { transform: translateX(0); }
   color: var(--navy);
 }
 .menu-box .navigation li a:hover { color: var(--red); background: var(--bg); }
-.menu-box .navigation li ul { position: static; box-shadow: none; border-radius: 0; border: none; animation: none; background: var(--bg); }
+.menu-box .navigation li ul { position: static; box-shadow: none; border-radius: 0; border: none; animation: none; background: var(--bg); display: none; opacity: 1; visibility: visible; transition: none; }
 .menu-box .navigation li ul li a { padding-left: 36px; font-size: 13px; }
 .contact-list-one { list-style: none; padding: 18px 20px; display: flex; flex-direction: column; gap: 12px; border-bottom: 1px solid var(--border); }
 .contact-info-box { display: flex; align-items: center; gap: 12px; }
 .contact-info-box .icon { font-size: 20px; color: var(--red); width: 36px; flex-shrink: 0; }
-.contact-info-box .title { display: block; font-size: 11px; text-transform: uppercase; letter-spacing: .8px; color: var(--text-light); }
+.contact-info-box .title { display: block; font-size: 11px; text-transform: uppercase; letter-spacing: .8px; color: var(--text-light); white-space: nowrap; width: 75px; flex-shrink: 0; }
 .contact-info-box a { font-size: 14px; font-weight: 600; color: var(--navy); }
 .social-links { list-style: none; display: flex; gap: 8px; padding: 16px 20px; }
 .social-links li a {

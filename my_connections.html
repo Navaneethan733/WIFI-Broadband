@@ -1,0 +1,576 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>STACKLY - My Connections</title>
+
+<link href="css/bootstrap.min.css" rel="stylesheet">
+<link href="css/flaticon.css" rel="stylesheet">
+<link href="css/fontawesome.css" rel="stylesheet">
+<link href="css/animate.css" rel="stylesheet">
+<link href="css/style.css" rel="stylesheet">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0">
+
+<style>
+    :root {
+        --sidebar-width: 280px;
+        --dash-bg: #0a0a1e;
+        --card-bg: rgba(255, 255, 255, 0.03);
+        --card-border: rgba(255, 255, 255, 0.08);
+        --accent: #e8192c;
+        --accent-glow: 0 0 15px rgba(232, 25, 44, 0.4);
+        --text-muted: rgba(255, 255, 255, 0.6);
+    }
+    
+    body {
+        background-color: var(--dash-bg);
+        color: #fff;
+        margin: 0;
+        overflow-x: hidden;
+        font-family: 'Inter', sans-serif;
+    }
+
+    .dash-bg-effect {
+        position: fixed; inset: 0; z-index: -1; pointer-events: none;
+    }
+    .dash-bg-effect .blob-1 {
+        position: absolute; top: -10%; left: -10%;
+        width: 500px; height: 500px;
+        background: radial-gradient(circle, rgba(232,25,44,0.1) 0%, transparent 60%);
+        border-radius: 50%; filter: blur(40px); animation: drift 20s infinite alternate;
+    }
+    .dash-bg-effect .blob-2 {
+        position: absolute; bottom: -20%; right: -10%;
+        width: 600px; height: 600px;
+        background: radial-gradient(circle, rgba(0,100,255,0.08) 0%, transparent 60%);
+        border-radius: 50%; filter: blur(50px); animation: drift 25s infinite alternate-reverse;
+    }
+
+    .dashboard-layout {
+        display: flex;
+        min-height: calc(100vh - 100px);
+        margin-top: 120px; /* Space for the fixed header */
+        position: relative;
+        z-index: 2;
+    }
+
+    /* Update Sidebar to be sticky instead of fixed viewport */
+    .dash-sidebar {
+        width: var(--sidebar-width);
+        background: rgba(10, 10, 30, 0.8);
+        backdrop-filter: blur(20px);
+        -webkit-backdrop-filter: blur(20px);
+        border-right: 1px solid var(--card-border);
+        border-radius: 0 20px 20px 0;
+        position: sticky;
+        top: 120px;
+        height: calc(100vh - 140px);
+        z-index: 100;
+        display: flex;
+        flex-direction: column;
+        transition: transform 0.4s cubic-bezier(0.2, 0.8, 0.2, 1);
+        margin-bottom: 40px;
+    }
+    .dash-nav { flex-grow: 1; padding: 20px 0; display: flex; flex-direction: column; gap: 8px; overflow-y: auto;}
+    .dash-nav::-webkit-scrollbar { width: 4px; }
+    .dash-nav::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.1); border-radius: 4px; }
+    .dash-nav-item {
+        padding: 14px 30px; display: flex; align-items: center; gap: 15px;
+        color: var(--text-muted); text-decoration: none; font-weight: 500;
+        font-size: 1.05rem; transition: all 0.3s ease; position: relative;
+    }
+    .dash-nav-item i { font-size: 1.2rem; transition: transform 0.3s ease; width: 25px; text-align: center; }
+    .dash-nav-item:hover, .dash-nav-item.active { color: #fff; background: linear-gradient(90deg, rgba(232,25,44,0.12) 0%, transparent 100%); }
+    .dash-nav-item:hover i { transform: scale(1.15) translateY(-2px); color: var(--accent); text-shadow: var(--accent-glow); }
+    .dash-nav-item.active i { color: var(--accent); }
+    .dash-nav-item.active::before {
+        content: ''; position: absolute; left: 0; top: 0; bottom: 0;
+        width: 4px; background: var(--accent); box-shadow: var(--accent-glow);
+    }
+
+    .dash-main {
+        flex-grow: 1;
+        padding: 0 40px 40px 40px;
+        display: flex; flex-direction: column; max-width: 1400px;
+        min-width: 0; /* fixes flex child overflow */
+    }
+
+    .dash-header-top {
+        display: flex; justify-content: space-between; align-items: center;
+        margin-bottom: 40px; animation: slideDown 0.6s ease forwards;
+    }
+    .dash-greeting h1 {
+        font-size: 2.2rem; font-weight: 800; margin: 0;
+        background: linear-gradient(90deg, #fff, rgba(255,255,255,0.7));
+        -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+    }
+    .dash-greeting p { color: var(--text-muted); margin: 5px 0 0 0; font-size: 1rem; }
+    
+    .dash-profile { display: flex; align-items: center; gap: 20px; }
+    .notify-btn {
+        background: var(--card-bg); border: 1px solid var(--card-border);
+        width: 45px; height: 45px; border-radius: 50%;
+        display: flex; align-items: center; justify-content: center;
+        color: #fff; cursor: pointer; transition: all 0.3s ease; position: relative;
+    }
+    .notify-btn:hover { background: rgba(255,255,255,0.1); transform: translateY(-3px); box-shadow: 0 5px 15px rgba(0,0,0,0.2); }
+    .notify-badge {
+        position: absolute; top: 10px; right: 10px; width: 8px; height: 8px;
+        background: var(--accent); border-radius: 50%; box-shadow: var(--accent-glow);
+        animation: pulseBadge 2s infinite;
+    }
+    .user-avatar {
+        width: 50px; height: 50px; border-radius: 50%;
+        background: linear-gradient(135deg, var(--accent), #ff4d5a); padding: 2px;
+        overflow: hidden; cursor: pointer; transition: transform 0.3s ease;
+    }
+    .user-avatar:hover { transform: scale(1.05) rotate(5deg); }
+    .user-avatar img { width: 100%; height: 100%; border-radius: 50%; object-fit: cover; }
+
+    .dash-card {
+        background: var(--card-bg); border: 1px solid var(--card-border);
+        border-radius: 20px; padding: 30px; backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px);
+        transition: transform 0.4s ease, box-shadow 0.4s ease, border-color 0.4s ease;
+        position: relative; overflow: hidden;
+        animation: slideUpFade 0.6s ease forwards; margin-bottom: 30px;
+    }
+    .dash-card::before {
+        content: ''; position: absolute; top: 0; left: 0; right: 0; height: 50%;
+        background: linear-gradient(180deg, rgba(255,255,255,0.03) 0%, transparent 100%);
+        border-radius: 20px 20px 0 0; pointer-events: none;
+    }
+    .dash-card:hover { border-color: rgba(232, 25, 44, 0.3); }
+    
+    .card-title { color: var(--text-muted); font-size: 1rem; text-transform: uppercase; letter-spacing: 1.5px; margin: 0 0 20px 0; font-weight: 700; }
+
+    /* Mobile Toggle */
+    .mobile-header { display: none; align-items: center; gap: 20px; }
+    .mobile-toggle {
+        background: rgba(255,255,255,0.05); border: 1px solid var(--card-border); 
+        color: #fff; font-size: 1.5rem; cursor: pointer;
+        width: 45px; height: 45px; border-radius: 10px;
+        display: flex; align-items: center; justify-content: center;
+    }
+    
+    @keyframes slideUpFade { from { opacity: 0; transform: translateY(30px); } to { opacity: 1; transform: translateY(0); } }
+    @keyframes slideDown { from { opacity: 0; transform: translateY(-20px); } to { opacity: 1; transform: translateY(0); } }
+    @keyframes pulseBadge { 0% { box-shadow: 0 0 0 0 rgba(232,25,44,0.7); } 70% { box-shadow: 0 0 0 10px rgba(232,25,44,0); } 100% { box-shadow: 0 0 0 0 rgba(232,25,44,0); } }
+    @keyframes drift { 0% { transform: translate(0,0) scale(1); } 100% { transform: translate(40px,40px) scale(1.05); } }
+
+    @media (max-width: 991px) {
+        .dashboard-layout { margin-top: 80px; }
+        .dash-sidebar {
+            position: fixed; top: 0; height: 100vh;
+            transform: translateX(-100%); width: 300px; z-index: 1000; border-radius: 0; margin-bottom: 0;
+            background: rgba(10, 10, 30, 0.95);
+        }
+        .dash-sidebar.show { transform: translateX(0); }
+        .dash-main { padding: 20px; }
+        .mobile-header { display: flex; }
+        .dash-greeting { display: none; }
+        .dash-header-top { margin-bottom: 25px; }
+        
+        /* Fix table overflow on mobile */
+        .dash-card { padding: 20px; }
+    }
+    
+    @media (max-width: 767px) {
+        .dash-grid { grid-template-columns: 1fr !important; }
+    }
+</style>
+</head>
+<body>
+<div class="page-wrapper">
+	<header class="main-header header-style-one">
+  
+		<div class="header-lower">
+			
+			<div class="main-box">
+				<div class="logo-box">
+					<div class="logo"><a href="index.html"><img src="images/logo.webp" alt="" title="STACKLY"></a></div>
+				</div>
+
+				
+				<div class="nav-outer">    
+					<nav class="nav main-menu">
+						<ul class="navigation">
+							<li class="current dropdown"><a href="index.html">Home</a>
+								<ul>
+									<li><a href="index.html">Home 1</a></li>
+									<li><a href="index-2.html">Home 2</a></li>
+								</ul>
+							</li>
+							<li><a href="services.html">Services</a></li>
+							<li><a href="about.html">About</a></li>
+							<li><a href="blog.html">Blog</a></li>
+							<li><a href="contact.html">Contact</a></li>
+							<li><a href="dashboard.html">Dashboard</a></li>
+							<li><a href="login.html">Login</a></li>
+						</ul>
+					</nav>
+					
+				</div>
+
+				<div class="outer-box">
+					<div class="mobile-nav-toggler"><span class="icon lnr-icon-bars"></span></div>
+				</div>
+			</div>
+		</div>
+
+		
+		<div class="mobile-menu">
+			<div class="menu-backdrop"></div>
+		
+			
+			<nav class="menu-box">
+				<div class="upper-box">
+					<div class="nav-logo"><a href="index.html"><img src="images/logo.webp" alt="" title=""></a></div>
+					<div class="close-btn"><i class="icon fa fa-times"></i></div>
+				</div>
+		
+				<ul class="navigation clearfix">
+					
+				</ul>
+				<ul class="contact-list-one">
+					<li>
+						
+						<div class="contact-info-box">
+							<i class="icon lnr-icon-phone-handset"></i>
+							<span class="title">Call Now</span>
+							<a href="tel:+92880098670">+92 (8800) - 98670</a>
+						</div>
+					</li>
+					<li>
+						
+						<div class="contact-info-box">
+							<span class="icon lnr-icon-envelope1"></span>
+							<span class="title">Send Email</span>
+							<a href="mailto:help@company.com">help@company.com</a>
+						</div>
+					</li>
+					<li>
+						
+						<div class="contact-info-box">
+							<span class="icon lnr-icon-clock"></span>
+							<span class="title">Send Email</span>
+							Mon - Sat 8:00 - 6:30, Sunday - CLOSED
+						</div>
+					</li>
+				</ul>
+		
+		
+				<ul class="social-links">
+					<li><a href="./404.html"><i class="fa fa-x"></i></a></li>
+					<li><a href="./404.html"><i class="fab fa-facebook-f"></i></a></li>
+					<li><a href="./404.html"><i class="fab fa-pinterest"></i></a></li>
+					<li><a href="./404.html"><i class="fab fa-instagram"></i></a></li>
+				</ul>
+			</nav>
+		</div>
+
+		
+		<div class="search-popup">
+			<span class="search-back-drop"></span>
+			<button class="close-search"><span class="fa fa-times"></span></button>
+		
+			<div class="search-inner">
+				<form method="post" action="index.html">
+					<div class="form-group">
+						<input type="search" name="search-field" value="" placeholder="Search..." required="">
+						<button type="submit"><i class="fa fa-search"></i></button>
+					</div>
+				</form>
+			</div>
+		</div>
+		
+
+		
+		<div class="sticky-header">
+			<div class="auto-container">
+				<div class="inner-container">
+					
+					<div class="logo">
+						<a href="index.html" title=""><img src="images/logo.webp" alt="" title=""></a>
+					</div>
+		
+					
+					<div class="nav-outer">
+						
+						<nav class="main-menu">
+							<div class="navbar-collapse show collapse clearfix">
+								<ul class="navigation clearfix">
+									
+								</ul>
+							</div>
+						</nav>
+		
+						
+						<div class="mobile-nav-toggler"><span class="icon lnr-icon-bars"></span></div>
+					</div>
+				</div>
+			</div>
+		</div>
+    <div class="dash-bg-effect">
+        <div class="blob-1"></div>
+        <div class="blob-2"></div>
+    </div>
+    
+    <div class="dashboard-layout">
+        <aside class="dash-sidebar" id="sidebar">
+            
+        <nav class="dash-nav">
+            <a href="dashboard.html" class="dash-nav-item "><i class="fa fa-home"></i> Overview</a>
+            <a href="my_connections.html" class="dash-nav-item active"><i class="fa fa-wifi"></i> My Connections</a>
+            <a href="data_usage.html" class="dash-nav-item "><i class="fa fa-chart-pie"></i> Data Usage</a>
+            <a href="billing.html" class="dash-nav-item "><i class="fa fa-file-invoice-dollar"></i> Billing & Invoices</a>
+            <a href="support_tickets.html" class="dash-nav-item "><i class="fa fa-headset"></i> Support Tickets</a>
+            <a href="settings.html" class="dash-nav-item "><i class="fa fa-cog"></i> Settings</a>
+        </nav>
+
+            <div style="padding: 20px 30px; margin-top: auto; border-top: 1px solid rgba(255,255,255,0.05);">
+                <a href="login.html" class="dash-nav-item" style="padding: 10px 0; color:var(--accent);"><i class="fa fa-sign-out-alt"></i> Logout</a>
+            </div>
+        </aside>
+        
+        <main class="dash-main">
+            <header class="dash-header-top">
+                <div class="mobile-header">
+                    <button class="mobile-toggle" id="mobileToggle" aria-label="Toggle Menu"><i class="fa fa-bars"></i></button>
+                    <div class="dash-greeting" style="display: block;">
+                        <h1 style="font-size: 1.5rem;">My Connections</h1>
+                    </div>
+                </div>
+                
+                <div class="dash-greeting" id="desktopGreeting">
+                    <h1>My Connections</h1>
+                    <p>Manage your account and services easily.</p>
+                </div>
+
+                <div class="dash-profile">
+                    <button class="notify-btn" aria-label="Notifications">
+                        <i class="far fa-bell" style="font-size: 1.2rem;"></i>
+                        <span class="notify-badge"></span>
+                    </button>
+                    <div class="user-avatar" title="Alex Doe">
+                        <img src="images/resource/author-1.webp" alt="User" onerror="this.src='https://ui-avatars.com/api/?name=Alex+Doe&background=e8192c&color=fff&size=100'">
+                    </div>
+                </div>
+            </header>
+            
+            
+        <div class="dash-card">
+            <h3 class="card-title">Registered Connections</h3>
+            <div style="overflow-x: auto; -webkit-overflow-scrolling: touch;">
+                <table style="width: 100%; text-align: left; border-collapse: collapse; min-width: 600px;">
+                    <thead>
+                        <tr>
+                            <th style="padding: 15px; border-bottom: 1px solid rgba(255,255,255,0.1); color: var(--text-muted);">Connection ID</th>
+                            <th style="padding: 15px; border-bottom: 1px solid rgba(255,255,255,0.1); color: var(--text-muted);">Plan</th>
+                            <th style="padding: 15px; border-bottom: 1px solid rgba(255,255,255,0.1); color: var(--text-muted);">Location</th>
+                            <th style="padding: 15px; border-bottom: 1px solid rgba(255,255,255,0.1); color: var(--text-muted);">Status</th>
+                            <th style="padding: 15px; border-bottom: 1px solid rgba(255,255,255,0.1); color: var(--text-muted);">Action</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td style="padding: 15px; border-bottom: 1px solid rgba(255,255,255,0.05); color:#fff;">#CON-4820</td>
+                            <td style="padding: 15px; border-bottom: 1px solid rgba(255,255,255,0.05); font-weight: 600; color:#fff;">Silver Plus</td>
+                            <td style="padding: 15px; border-bottom: 1px solid rgba(255,255,255,0.05); color:var(--text-muted);">123 Main St, Apt 4B</td>
+                            <td style="padding: 15px; border-bottom: 1px solid rgba(255,255,255,0.05);"><span style="background: rgba(0,255,100,0.1); color: #00ff64; padding: 5px 10px; border-radius: 10px; font-size: 0.8rem; font-weight: 600;">Online</span></td>
+                            <td style="padding: 15px; border-bottom: 1px solid rgba(255,255,255,0.05);"><a href="#" style="color: var(--accent); font-weight: 600; text-decoration: none;">Manage</a></td>
+                        </tr>
+                        <tr>
+                            <td style="padding: 15px; border-bottom: none; color:#fff;">#CON-1093</td>
+                            <td style="padding: 15px; border-bottom: none; font-weight: 600; color:#fff;">Bronze Internet</td>
+                            <td style="padding: 15px; border-bottom: none; color:var(--text-muted);">456 Office Pkwy</td>
+                            <td style="padding: 15px; border-bottom: none;"><span style="background: rgba(255,255,255,0.1); color: #ccc; padding: 5px 10px; border-radius: 10px; font-size: 0.8rem; font-weight: 600;">Offline</span></td>
+                            <td style="padding: 15px; border-bottom: none;"><a href="#" style="color: var(--accent); font-weight: 600; text-decoration: none;">Manage</a></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <button style="margin-top: 20px; background: var(--accent); color: #fff; padding: 12px 25px; border: none; border-radius: 10px; cursor: pointer; font-weight: 600; font-family: 'Inter', sans-serif;"><i class="fa fa-plus"></i> Add New Connection</button>
+        </div>
+
+            
+        </main>
+    </div>
+    	<footer class="main-footer">
+		<div class="bg bg-pattern-3"></div>
+		
+		
+		<div class="footer-upper">
+			<div class="auto-container">
+				<div class="row">
+					
+					<div class="logo-box col-lg-4 col-md-12">
+						<div class="inner">
+							<div class="logo"><a href="#"> <img src="images/logo.webp" alt=""></a></div>
+						</div>
+					</div>
+					
+					<div class="contact-info-block col-lg-4 col-md-6">
+						<div class="inner">
+							<i class="icon lnr lnr-icon-phone-handset"></i>
+							<span class="sub-title">Call Us On</span>
+							<div class="text"><a href="tel:+91458654528">+91 9876543210</a></div>
+						</div>
+					</div>
+					
+					<div class="contact-info-block col-lg-4 col-md-6">
+						<div class="inner">
+							<i class="icon lnr lnr-icon-envelope1"></i>
+							<span class="sub-title">Mail to Us</span>
+							<div class="text"><a href="mailto:STACKLY@support.com">STACKLY@support.com</a></div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+
+		
+		<div class="widgets-section">
+			<div class="auto-container">
+				<div class="row">
+					
+					<div class="footer-column col-lg-4 col-md-6">
+						<div class="footer-widget about-widget">
+							<h6 class="widget-title">About Us</h6>
+							<div class="widget-content">
+								<div class="text">To get started with us, please go over <br> all of our internet plans and other <br>plans to let our operators.</div>
+								<ul class="social-icon-two mt-4">
+									<li><a href="#404.html"><i class="fab fa-facebook-f"></i></a></li>
+									<li><a href="#404.html"><i class="fa fa-x"></i></a></li>
+									<li><a href="#404.html"><i class="fab fa-linkedin"></i></a></li>
+								</ul>
+							</div>
+						</div>
+					</div>
+					
+					
+					<div class="footer-column col-xl-4 col-lg-4 col-md-6 mb-0">
+						<div class="row">
+							<div class="col-lg-6 col-md-6">
+								<div class="widget links-widget">
+									<h6 class="widget-title">Useful Links</h6>
+									<div class="widget-content">
+										<ul class="user-links">
+											<li><a href="services.html">Services</a></li>
+											<li><a href="about.html">About Us</a></li>
+											<li><a href="blog.html">Blog</a></li>
+											<li><a href="contact.html">Contact Us</a></li>
+											<li><a href="#404.html">404 Error</a></li>
+										</ul>                                
+									</div>
+								</div>
+							</div>
+
+							<div class="col-lg-6 col-md-6">
+								<div class="widget links-widget">
+									<h6 class="widget-title">Services</h6>
+									<div class="widget-content">
+										<ul class="user-links">
+											<li><a href="404.html">Home Internet</a></li>
+											<li><a href="404.html">Corporate Net</a></li>
+											<li><a href="404.html">SKE Internet</a></li>
+											<li><a href="404.html">Web Hosting</a></li>
+											<li><a href="404.html">GPS Tracker</a></li>
+										</ul>                                
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+
+					
+					<div class="footer-column col-lg-4 col-md-8">
+						<div class="widget newsletter-widget">
+							<h6 class="widget-title">Newsletter</h6>
+							<div class="widget-content">
+								<div class="text">Sign up for alerts, our latest blogs, thoughts, and insights.</div>
+								<div class="subscribe-form">
+									<form method="post" action="#">
+										<div class="form-group">
+											<input type="email" name="email" class="email" value="" placeholder="Your Email" required="">
+											<button type="button" class="theme-btn btn-style-one"><i class="far fa-paper-plane"></i></button>
+										</div>
+									</form>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+
+		
+		<div class="footer-bottom">
+			<div class="auto-container">
+				<div class="copyright-text">© Copyrights reserved by <a href="index.html"> kodesolution</a></div>
+			</div>
+		</div>
+	</footer>
+<div id="sidebarOverlay" style="display:none; position:fixed; inset:0; background:rgba(0,0,0,0.7); z-index:990; backdrop-filter:blur(8px); transition: opacity 0.3s ease;"></div>
+
+<script src="js/jquery.js?v=4"></script> 
+<script src="js/popper.min.js?v=4"></script>
+<script src="js/bootstrap.min.js?v=4"></script>
+<script src="js/jquery.fancybox.js?v=4"></script>
+<script src="js/wow.js?v=4"></script>
+<script src="js/appear.js?v=4"></script>
+<script src="js/select2.min.js?v=4"></script>
+<script src="js/owl.js?v=4"></script>
+<script src="js/script.js?v=4"></script>
+
+<script>
+    if (window.innerWidth <= 991) {
+        let dg = document.getElementById('desktopGreeting');
+        if(dg) dg.style.display = 'none';
+    }
+
+    const mobileToggle = document.getElementById('mobileToggle');
+    const sidebar = document.getElementById('sidebar');
+    const overlay = document.getElementById('sidebarOverlay');
+
+    function toggleSidebar() {
+        if(!sidebar) return;
+        const isShow = sidebar.classList.toggle('show');
+        if (isShow) {
+            overlay.style.display = 'block';
+            setTimeout(() => overlay.style.opacity = '1', 10);
+            document.body.style.overflow = 'hidden';
+        } else {
+            overlay.style.opacity = '0';
+            setTimeout(() => {
+                overlay.style.display = 'none';
+                document.body.style.overflow = '';
+            }, 300);
+        }
+    }
+
+    if(mobileToggle) mobileToggle.addEventListener('click', toggleSidebar);
+    if(overlay) overlay.addEventListener('click', toggleSidebar);
+    
+    // Dynamic counters
+    ₹(document).ready(function() {
+        if (₹('.count-box').length) {
+            ₹('.count-box').appear(function(){
+                var ₹t = ₹(this),
+                    n = ₹t.find(".count-text").attr("data-stop"),
+                    r = parseInt(₹t.find(".count-text").attr("data-speed"), 10);
+                if (!₹t.hasClass("counted")) {
+                    ₹t.addClass("counted");
+                    ₹({ countNum: ₹t.find(".count-text").text() }).animate({ countNum: n }, {
+                        duration: r,
+                        easing: "linear",
+                        step: function() { ₹t.find(".count-text").text(Math.floor(this.countNum)); },
+                        complete: function() { ₹t.find(".count-text").text(this.countNum); }
+                    });
+                }
+            },{accY: 0});
+        }
+    });
+</script>
+</body>
+</html>

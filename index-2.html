@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="en">
 <head>
 <meta charset="utf-8">
@@ -20,7 +20,88 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0">
 
-
+<style>
+/* Mobile Responsiveness for home2-banner */
+@media screen and (max-width: 767px) {
+	.home2-banner {
+		padding: 120px 0 60px !important;
+	}
+	.home2-banner .title {
+		font-size: 2.5rem !important;
+		margin-bottom: 15px !important;
+	}
+	.home2-banner .text {
+		font-size: 16px !important;
+		margin-bottom: 25px !important;
+		text-align: center !important;
+	}
+	.home2-banner .content-column {
+		text-align: center !important;
+	}
+	.home2-banner .sub-title {
+		justify-content: center !important;
+	}
+	.coverage-form {
+		flex-direction: column !important;
+		border-radius: 20px !important;
+		padding: 20px !important;
+		gap: 15px !important;
+		margin: 0 auto !important;
+	}
+	.coverage-form i {
+		display: none !important;
+	}
+	.coverage-form input {
+		width: 100% !important;
+		text-align: center !important;
+		background: #f8f9fa !important;
+		padding: 12px !important;
+		border-radius: 10px !important;
+	}
+	.coverage-form button {
+		width: 100% !important;
+		margin-left: 0 !important;
+		border-radius: 10px !important;
+	}
+	.user-stats {
+		flex-direction: column !important;
+		text-align: center !important;
+		gap: 10px !important;
+		justify-content: center !important;
+	}
+	.home2-banner .image-box {
+		margin-top: 50px !important;
+		display: flex !important;
+		flex-direction: column !important;
+		align-items: center !important;
+	}
+	.home2-banner .image-box figure.image img {
+		transform: none !important;
+	}
+	.home2-banner .float-box,
+	.home2-banner .float-box-2 {
+		position: relative !important;
+		top: auto !important;
+		bottom: auto !important;
+		left: auto !important;
+		right: auto !important;
+		width: 90% !important;
+		z-index: 5 !important;
+	}
+	.home2-banner .float-box {
+		margin-top: -30px !important;
+		margin-bottom: 10px !important;
+	}
+	.home2-banner .float-box-2 {
+		margin-top: -10px !important;
+	}
+}
+@media screen and (max-width: 575px) {
+	.home2-banner .title {
+		font-size: 2rem !important;
+	}
+}
+</style>
 </head>
 
 <body>
@@ -54,18 +135,14 @@
 							<li><a href="about.html">About</a></li>
 							<li><a href="blog.html">Blog</a></li>
 							<li><a href="contact.html">Contact</a></li>
+							<li><a href="dashboard.html">Dashboard</a></li>
+							<li><a href="login.html">Login</a></li>
 						</ul>
 					</nav>
 					
 				</div>
 
-				<div class="outer-box">                    
-					<a href="tel:+92(8800)9806" class="info-btn">
-						<small>Call</small>
-						9876543210
-					</a>
-
-					
+				<div class="outer-box">
 					<div class="mobile-nav-toggler"><span class="icon lnr-icon-bars"></span></div>
 				</div>
 			</div>
@@ -102,14 +179,7 @@
 							<a href="mailto:help@company.com">help@company.com</a>
 						</div>
 					</li>
-					<li>
-						
-						<div class="contact-info-box">
-							<span class="icon lnr-icon-clock"></span>
-							<span class="title">Send Email</span>
-							Mon - Sat 8:00 - 6:30, Sunday - CLOSED
-						</div>
-					</li>
+
 				</ul>
 		
 		
@@ -266,7 +336,7 @@
 								<li><i class="fa fa-check"></i>IPv6 Public IP Only</li>
 								<li><i class="fa fa-check"></i>24/7 Phone and Online Support</li>
 							</ul>
-							<h3 class="price">$29.0 <small>/ Month</small></h3>
+							<h3 class="price">₹29.0 <small>/ Month</small></h3>
 							<div class="btn-box">
 								<a href="contact.html" class="theme-btn btn-style-one"><span class="btn-title">Get Started Now <i class="fa fa-arrow-right"></i></span></a>
 							</div>
@@ -296,7 +366,7 @@
 								<li><i class="fa fa-check"></i>IPv6 Public IP Only</li>
 								<li><i class="fa fa-check"></i>24/7 Phone and Online Support</li>
 							</ul>
-							<h3 class="price">$49.0 <small>/ Month</small></h3>
+							<h3 class="price">₹49.0 <small>/ Month</small></h3>
 							<div class="btn-box">
 								<a href="contact.html" class="theme-btn btn-style-one"><span class="btn-title">Get Started Now <i class="fa fa-arrow-right"></i></span></a>
 							</div>
@@ -332,7 +402,7 @@
 								<li><i class="fa fa-check"></i>IPv6 Public IP Only</li>
 								<li><i class="fa fa-check"></i>24/7 Phone and Online Support</li>
 							</ul>
-							<h3 class="price">$69.0 <small>/ Month</small></h3>
+							<h3 class="price">₹69.0 <small>/ Month</small></h3>
 							<div class="btn-box">
 								<a href="contact.html" class="theme-btn btn-style-one"><span class="btn-title">Get Started Now <i class="fa fa-arrow-right"></i></span></a>
 							</div>
@@ -514,7 +584,7 @@
 					<div class="content-box">
 						<figure class="image"><img src="images/resource/image-1.webp" alt=""></figure>
 						<h4 class="title">STACKLY Home Wifi</h4>
-						<div class="price">Starting From <span class="color2">$49.9</span> / <small>Month</small></div>
+						<div class="price">Starting From <span class="color2">₹49.9</span> / <small>Month</small></div>
 						<div class="btn-box animate-2">
 							<a href="contact.html" class="theme-btn btn-style-one"><span class="btn-title">Get Started Now <i class="fa fa-arrow-right"></i></span></a>
 						</div>
@@ -541,7 +611,7 @@
 								<div class="text">Get connected with STACKLY Limited that can provide your every technology need to connect the world.</div>
 							</div>
 							<div class="info-box">
-								<div class="info"><i class="icon fa fa-laptop-mobile"></i> $49.9 /<sub>Month</sub></div>
+								<div class="info"><i class="icon fa fa-laptop-mobile"></i> ₹49.9 /<sub>Month</sub></div>
 								<a href="contact.html" class="theme-btn btn-style-one dark-bg"><span class="btn-title">Get Started Now <i class="fa fa-arrow-right"></i></span></a>
 							</div>
 						</div>
